@@ -337,6 +337,7 @@ __pycache__/
 
 *.csproj
 *.sln
+*.zip
 
 # OpenCover UI analysis results
 OpenCover/
