@@ -1,10 +1,21 @@
 # Hack Pad
 
-This project is a mod for a game that introduces a new item: the Hack Pad. The tool is used to hack into terminals within the game.
+This mod introduces a new item: the Hack Pad. The tool provides a way to open and close Big Doors as well as disable turrets manually without requiring somebody to stay behind in the ship.
 
 ## Usage
 
 To use the Hack Pad ensure it is charged, press the "use" key (LMB on keyboard/mouse) to turn it on and off. While the Hack Pad is powered on simply look at nearby turret or big door and hold the "interact" key (E on keyboard/mouse) to begin hacking.
+
+## Configuration
+
+Both the price and hacking speed of the Hack Pad are configurable.
+To change these values take the following steps:
+- Run the game at least once after installing the mod
+- Open r2modman or Thunderstore Mod Manager
+- Click "Edit Config" and look for a config entry named `BepInEx/config/com.willis.lc.portablehackpad.cfg`
+- Modify `HackPad_Cost` and `HackPad_HackDuration` to your desired values
+- Click "Save"
+- Run the game
 
 ## Features
 

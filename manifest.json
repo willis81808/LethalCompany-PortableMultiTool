@@ -1,6 +1,6 @@
 {
   "name": "HackPad",
-  "version_number": "1.0.0",
+  "version_number": "1.0.1",
   "website_url": "https://github.com/willis81808/LethalCompany-PortableMultiTool",
   "description": "Open/close big doors and disable turrets on-the-go!",
   "dependencies": [

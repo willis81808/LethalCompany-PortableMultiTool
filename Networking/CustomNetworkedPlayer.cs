@@ -19,6 +19,7 @@ internal class CustomNetworkedPlayer : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         enabled = true;
+        gameObject.SetActive(true);
         transform.SetParent(playerController.transform);
         base.OnNetworkSpawn();
     }
@@ -34,14 +35,15 @@ internal class CustomNetworkedPlayer : NetworkBehaviour
 
     private void LocalUpdate()
     {
-        /*
-        playerController.health = 5000;
-        playerController.sprintMeter = 5000;
-        playerController.sprintMultiplier = 5;
+        //playerController.health = 5000;
+        //playerController.sprintMeter = 5000;
+        //playerController.sprintMultiplier = 5;
 
+        /*
         if (Keyboard.current.numpad0Key.wasPressedThisFrame)
         {
             PortableMultiToolBase.Instance.Logger.LogWarning("Pressed numpad 0!");
+            Assets.DynamicItemCostTest += 1;
         }
         */
     }

@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using static TerminalApi.TerminalApi;
 using System.Text;
+using System.Reflection.Emit;
+using PortableMultiTool.Util;
 
 namespace PortableMultiTool.Patches;
 
-[HarmonyPatch(typeof(Terminal), "ParsePlayerSentence")]
+[HarmonyPatch(typeof(Terminal))]
 public class Terminal_Patches
 {
     private static readonly Dictionary<TerminalNode, TerminalActionData> commandCallbacks = [];
@@ -17,7 +19,9 @@ public class Terminal_Patches
         public Func<string> ResponseProvider { get; set; }
     }
 
-    static void Postfix(ref TerminalNode __result)
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
+    static void ParsePlayerSentence_Postfix(ref TerminalNode __result)
     {
         if (commandCallbacks.TryGetValue(__result, out var actionData))
         {
@@ -27,6 +31,35 @@ public class Terminal_Patches
         else
         {
             PortableMultiToolBase.Instance.Logger.LogWarning($"No custom callback found for command");
+        }
+    }
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(Terminal.LoadNewNodeIfAffordable))]
+    [HarmonyPatch(nameof(Terminal.OnSubmit))]
+    [HarmonyPatch(nameof(Terminal.TextPostProcess))]
+    static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
+    {
+        var itemCostFieldInfo = AccessTools.Field(typeof(TerminalNode), nameof(TerminalNode.itemCost));
+        var getTerminalNodeCostMemthodInfo = AccessTools.Method(typeof(ShopUtils), nameof(ShopUtils.GetTerminalNodeCost));
+
+        var creditsWorthFieldInfo = AccessTools.Field(typeof(Item), nameof(Item.creditsWorth));
+        var getItemCreditsWorthMethodInfo = AccessTools.Method(typeof(ShopUtils), nameof(ShopUtils.GetItemCreditsWorth));
+
+        foreach (var instruction in instructions)
+        {
+            if (instruction.opcode == OpCodes.Ldfld && instruction.operand == itemCostFieldInfo)
+            {
+                yield return new CodeInstruction(OpCodes.Call, getTerminalNodeCostMemthodInfo);
+            }
+            else if (instruction.opcode == OpCodes.Ldfld && instruction.operand == creditsWorthFieldInfo)
+            {
+                yield return new CodeInstruction(OpCodes.Call, getItemCreditsWorthMethodInfo);
+            }
+            else
+            {
+                yield return instruction;
+            }
         }
     }
 

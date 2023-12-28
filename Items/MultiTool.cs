@@ -23,9 +23,6 @@ public class MultiTool : GrabbableObject
     [SerializeField]
     private float caretBlinkRate = 0.5f;
 
-    [SerializeField]
-    private AudioSource audioSource;
-
     private float hackProgress = -1f;
 
     private bool displayingCompletedHack = false;
@@ -37,9 +34,9 @@ public class MultiTool : GrabbableObject
     private TerminalAccessibleObject currentHackTarget = null;
 
     [SerializeField]
-    private AudioClip idle, hackInProgress, hackFailure, hackSuccess, hackAbort, powerOn, powerOff;
+    private AudioSource idle, hackInProgress, hackFailure, hackSuccess, hackAbort, powerOn, powerOff;
 
-    private Dictionary<AudioType, AudioClip> audioSourceMap = new Dictionary<AudioType, AudioClip>();
+    private Dictionary<AudioType, AudioSource> audioSourceMap = new Dictionary<AudioType, AudioSource>();
 
     private Coroutine idleCoroutine;
 
@@ -54,10 +51,9 @@ public class MultiTool : GrabbableObject
         POWER_OFF
     }
 
-    public override void Start()
+    private void Awake()
     {
-        base.Start();
-        audioSourceMap = new Dictionary<AudioType, AudioClip>
+        audioSourceMap = new Dictionary<AudioType, AudioSource>
         {
             { AudioType.IDLE, idle },
             { AudioType.HACK_PROGRESS, hackInProgress },
@@ -112,13 +108,13 @@ public class MultiTool : GrabbableObject
                 hit.collider.GetComponentInParent<TerminalAccessibleObject>()
             })
             .Where(c => c != null && !c.inCooldown && c.isPoweredOn)
-            .Where(c => !c.gameObject.name.ToLower().Contains("landmine"))
+            .Where(c => !c.gameObject.name.ToLower().Contains("landmine")) // Disabling Landmines is broken right now, so we exclude them
             .Where(c => !hackTriggers.ContainsKey(c))
             .FirstOrDefault();
 
         if (target != null)
         {
-            var trigger = ConfigureHackInteraction(target, OnHackProgress, OnFinishHack, OnStopHack, 5f);
+            var trigger = ConfigureHackInteraction(target, OnHackProgress, OnFinishHack, OnStopHack, Config.hackPadHackDuration.Value);
             hackTriggers.Add(target, trigger);
         }
     }
@@ -147,10 +143,10 @@ public class MultiTool : GrabbableObject
         {
             PortableMultiToolBase.Instance.Logger.LogWarning($"Playing audio {type}");
 
-            audioSource.Stop();
-            audioSource.PlayOneShot(audio);
-            //WalkieTalkie.TransmitOneShotAudio(audioSource, audio, audioSource.volume);
+            audio.Play();
+            WalkieTalkie.TransmitOneShotAudio(audio, audio.clip, audio.volume);
             RoundManager.Instance.PlayAudibleNoise(transform.position, noiseIsInsideClosedShip: isInElevator && StartOfRound.Instance.hangarDoorsClosed);
+
             if (isLoud && playerHeldBy != null)
             {
                 playerHeldBy.timeSinceMakingLoudNoise = 0f;
@@ -164,6 +160,11 @@ public class MultiTool : GrabbableObject
     private void PlayAudio(AudioType type, bool isLoud = true)
     {
         if (!IsOwner) return;
+
+        if (type != AudioType.IDLE)
+        {
+            StopAudio();
+        }
 
         if (IsHost)
         {
@@ -183,7 +184,10 @@ public class MultiTool : GrabbableObject
     [ClientRpc]
     private void StopAudio_ClientRpc()
     {
-        audioSource.Stop();
+        foreach (var key in audioSourceMap.Keys)
+        {
+            audioSourceMap[key].Stop();
+        }
     }
     private void StopAudio()
     {
@@ -360,7 +364,7 @@ public class MultiTool : GrabbableObject
         Action<TerminalAccessibleObject, float> onInteractionHold,
         Action<TerminalAccessibleObject, PlayerControllerB> onFinishInteract,
         Action<TerminalAccessibleObject, PlayerControllerB> onStopInteract,
-        float hackDuration = 3f)
+        float hackDuration)
     {
         var interactObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
         interactObject.transform.position = target.transform.position;

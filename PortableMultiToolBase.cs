@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using GameNetcodeStuff;
 using HarmonyLib;
@@ -20,16 +21,22 @@ public class PortableMultiToolBase : BaseUnityPlugin
 {
     public const string MODGUID = "com.willis.lc.portablehackpad";
     public const string MODNAME = "PortableHackPad";
-    public const string MODVERSION = "1.0.0";
+    public const string MODVERSION = "1.0.1";
 
     public static PortableMultiToolBase Instance { get; private set; }
+
+    public static Config ModConfiguration { get; private set; }
 
     public new ManualLogSource Logger => base.Logger;
 
     public void Awake()
     {
         Instance = this;
+
+        ModConfiguration = new(base.Config);
+
         Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), MODGUID);
+        
         NetcodeWeaver();
     }
 
