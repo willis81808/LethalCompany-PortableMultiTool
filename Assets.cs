@@ -3,6 +3,7 @@ using UnityEngine;
 using PortableMultiTool.Items;
 using PortableMultiTool.Networking;
 using PortableMultiTool.Util;
+using static LethalLib.Modules.NetworkPrefabs;
 
 namespace PortableMultiTool;
 
@@ -14,8 +15,6 @@ internal static class Assets
     internal static Sprite HandIcon { get; private set; }
     internal static MultiTool MultiToolPrefab { get; private set; }
 
-    internal static int DynamicItemCostTest = 42;
-
     public static void LoadAssets()
     {
         PortableMultiToolBase.Instance.Logger.LogWarning("Loading custom assets");
@@ -25,7 +24,7 @@ internal static class Assets
         HandIcon = bundle.LoadAsset<Sprite>("HandIcon");
 
         MultiToolPrefab = bundle.LoadAsset<GameObject>("MultiTool").GetComponent<MultiTool>();
-        NetworkManager.Singleton.AddNetworkPrefab(MultiToolPrefab.gameObject);
+        RegisterNetworkPrefab(MultiToolPrefab.gameObject);
         ShopUtils.RegisterDynamicShopItem(MultiToolPrefab.itemProperties, () => Config.hackPadCost.Value);
 
         CustomNetworkedPlayerPrefab = new GameObject("Custom Networked Player Controller");
@@ -33,6 +32,6 @@ internal static class Assets
         CustomNetworkedPlayerPrefab.SetActive(false);
         CustomNetworkedPlayerPrefab.AddComponent<NetworkObject>();
         CustomNetworkedPlayerPrefab.AddComponent<CustomNetworkedPlayer>();
-        NetworkManager.Singleton.AddNetworkPrefab(CustomNetworkedPlayerPrefab);
+        RegisterNetworkPrefab(CustomNetworkedPlayerPrefab);
     }
 }

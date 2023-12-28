@@ -21,7 +21,7 @@ public class PortableMultiToolBase : BaseUnityPlugin
 {
     public const string MODGUID = "com.willis.lc.portablehackpad";
     public const string MODNAME = "PortableHackPad";
-    public const string MODVERSION = "1.0.1";
+    public const string MODVERSION = "1.0.3";
 
     public static PortableMultiToolBase Instance { get; private set; }
 
@@ -32,11 +32,10 @@ public class PortableMultiToolBase : BaseUnityPlugin
     public void Awake()
     {
         Instance = this;
-
         ModConfiguration = new(base.Config);
 
+        Assets.LoadAssets();
         Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), MODGUID);
-        
         NetcodeWeaver();
     }
 

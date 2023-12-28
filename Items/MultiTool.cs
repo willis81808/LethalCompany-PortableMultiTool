@@ -53,6 +53,8 @@ public class MultiTool : GrabbableObject
 
     private void Awake()
     {
+        itemProperties.batteryUsage = Config.hackPadBatteryLife.Value;
+
         audioSourceMap = new Dictionary<AudioType, AudioSource>
         {
             { AudioType.IDLE, idle },

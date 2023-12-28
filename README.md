@@ -13,7 +13,7 @@ To change these values take the following steps:
 - Run the game at least once after installing the mod
 - Open r2modman or Thunderstore Mod Manager
 - Click "Edit Config" and look for a config entry named `BepInEx/config/com.willis.lc.portablehackpad.cfg`
-- Modify `HackPad_Cost` and `HackPad_HackDuration` to your desired values
+- Modify `HackPad_Cost`, `HackPad_HackDuration`, and `HackPad_BatteryLife` to your desired values
 - Click "Save"
 - Run the game
 

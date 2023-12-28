@@ -11,6 +11,7 @@ namespace PortableMultiTool.Patches;
 [HarmonyPatch(typeof(Terminal))]
 public class Terminal_Patches
 {
+    /*
     private static readonly Dictionary<TerminalNode, TerminalActionData> commandCallbacks = [];
 
     private class TerminalActionData
@@ -23,16 +24,32 @@ public class Terminal_Patches
     [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
     static void ParsePlayerSentence_Postfix(ref TerminalNode __result)
     {
+        if (__result  == null) return;
         if (commandCallbacks.TryGetValue(__result, out var actionData))
         {
-            PortableMultiToolBase.Instance.Logger.LogWarning($"Invoking custom handler for keyword: {actionData.Keyword.word}");
+            PortableMultiToolBase.Instance.Logger.LogInfo($"Invoking custom handler for keyword: {actionData.Keyword.word}");
             __result.displayText = actionData.ResponseProvider();
         }
         else
         {
-            PortableMultiToolBase.Instance.Logger.LogWarning($"No custom callback found for command");
+            PortableMultiToolBase.Instance.Logger.LogInfo($"No custom callback found for command");
         }
     }
+
+    public static void AddCommand(string command, Func<string> responseSupplier)
+    {
+        command = command.ToLower();
+        TerminalKeyword mainKeyword = CreateTerminalKeyword(command);
+        TerminalNode triggerNode = CreateTerminalNode("", true);
+        mainKeyword.specialKeywordResult = triggerNode;
+        AddTerminalKeyword(mainKeyword);
+        commandCallbacks.Add(triggerNode, new TerminalActionData
+        {
+            Keyword = mainKeyword,
+            ResponseProvider = responseSupplier
+        });
+    }
+    */
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Terminal.LoadNewNodeIfAffordable))]
@@ -61,19 +78,5 @@ public class Terminal_Patches
                 yield return instruction;
             }
         }
-    }
-
-    public static void AddCommand(string command, Func<string> responseSupplier)
-    {
-        command = command.ToLower();
-        TerminalKeyword mainKeyword = CreateTerminalKeyword(command);
-        TerminalNode triggerNode = CreateTerminalNode("", true);
-        mainKeyword.specialKeywordResult = triggerNode;
-        AddTerminalKeyword(mainKeyword);
-        commandCallbacks.Add(triggerNode, new TerminalActionData
-        {
-            Keyword = mainKeyword,
-            ResponseProvider = responseSupplier
-        });
     }
 }
