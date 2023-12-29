@@ -3,6 +3,8 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using GameNetcodeStuff;
 using HarmonyLib;
+using LethalSettings.UI;
+using LethalSettings.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +18,13 @@ namespace PortableMultiTool;
 
 [BepInDependency("atomic.terminalapi", BepInDependency.DependencyFlags.HardDependency)]
 [BepInDependency("evaisa.lethallib", BepInDependency.DependencyFlags.HardDependency)]
+[BepInDependency("com.willis.lc.lethalsettings", BepInDependency.DependencyFlags.HardDependency)]
 [BepInPlugin(MODGUID, MODNAME, MODVERSION)]
 public class PortableMultiToolBase : BaseUnityPlugin
 {
     public const string MODGUID = "com.willis.lc.portablehackpad";
     public const string MODNAME = "PortableHackPad";
-    public const string MODVERSION = "1.0.3";
+    public const string MODVERSION = "1.1.0";
 
     public static PortableMultiToolBase Instance { get; private set; }
 
@@ -37,6 +40,8 @@ public class PortableMultiToolBase : BaseUnityPlugin
         Assets.LoadAssets();
         Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), MODGUID);
         NetcodeWeaver();
+
+        new GameObject("Hack Pad Settings Manager").AddComponent<SettingsMenu>();
     }
 
     private static void NetcodeWeaver()
