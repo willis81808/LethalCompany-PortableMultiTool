@@ -24,7 +24,7 @@ public class PortableMultiToolBase : BaseUnityPlugin
 {
     public const string MODGUID = "com.willis.lc.portablehackpad";
     public const string MODNAME = "PortableHackPad";
-    public const string MODVERSION = "1.1.0";
+    public const string MODVERSION = "1.1.1";
 
     public static PortableMultiToolBase Instance { get; private set; }
 
