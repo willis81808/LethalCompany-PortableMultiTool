@@ -41,32 +41,32 @@ internal class SettingsMenu : MonoBehaviour
         costSlider = new SliderComponent
         {
             Text = "Hack Pad Cost: $",
-            DefaultValue = Config.hackPadCost.Value,
+            Value = Config.hackPadCost.Value,
             MinValue = 10,
             MaxValue = 150,
             WholeNumbers = true,
             ShowValue = true,
-            OnValueChange = (self, value) => Config.hackPadCost.Value = (int)value
+            OnValueChanged = (self, value) => Config.hackPadCost.Value = (int)value
         };
         hackTimeSlider = new SliderComponent
         {
             Text = "Hack Duration (seconds):",
-            DefaultValue = Config.hackPadHackDuration.Value,
+            Value = Config.hackPadHackDuration.Value,
             MinValue = 1,
             MaxValue = 20,
             WholeNumbers = true,
             ShowValue = true,
-            OnValueChange = (self, value) => Config.hackPadHackDuration.Value = (int)value
+            OnValueChanged = (self, value) => Config.hackPadHackDuration.Value = (int)value
         };
         batteryLifeSlider = new SliderComponent
         {
             Text = "Battery Life (seconds):",
-            DefaultValue = Config.hackPadBatteryLife.Value,
+            Value = Config.hackPadBatteryLife.Value,
             MinValue = 10,
             MaxValue = 120,
             WholeNumbers = true,
             ShowValue = true,
-            OnValueChange = (self, value) => Config.hackPadBatteryLife.Value = (int)value
+            OnValueChanged = (self, value) => Config.hackPadBatteryLife.Value = (int)value
         };
         ModMenu.RegisterMod(new ModMenu.ModSettingsConfig
         {
@@ -94,12 +94,12 @@ internal class SettingsMenu : MonoBehaviour
     private void ResetDefaults(ButtonComponent component)
     {
         Config.hackPadCost.Value = (int)Config.hackPadCost.DefaultValue;
-        costSlider.CurrentValue = Config.hackPadCost.Value;
+        costSlider.Value = Config.hackPadCost.Value;
 
         Config.hackPadHackDuration.Value = (float)Config.hackPadHackDuration.DefaultValue;
-        hackTimeSlider.CurrentValue = Config.hackPadHackDuration.Value;
+        hackTimeSlider.Value = Config.hackPadHackDuration.Value;
 
         Config.hackPadBatteryLife.Value = (float)Config.hackPadBatteryLife.DefaultValue;
-        batteryLifeSlider.CurrentValue = Config.hackPadBatteryLife.Value;
+        batteryLifeSlider.Value = Config.hackPadBatteryLife.Value;
     }
 }
