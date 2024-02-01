@@ -14,7 +14,7 @@ internal static class Assets
     internal static GameObject CustomNetworkedPlayerPrefab { get; private set; }
     internal static Sprite HandIcon { get; private set; }
     internal static MultiTool MultiToolPrefab { get; private set; }
-
+    
     public static void LoadAssets()
     {
         PortableMultiToolBase.Instance.Logger.LogWarning("Loading custom assets");

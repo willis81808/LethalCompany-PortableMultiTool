@@ -1,7 +1,8 @@
 # Hack Pad
 
-![Thunderstore Downloads](https://img.shields.io/thunderstore/dt/willis81808/HackPad?style=for-the-badge)
-![Thunderstore Version](https://img.shields.io/thunderstore/v/willis81808/HackPad?style=for-the-badge)
+![Thunderstore Downloads](https://img.shields.io/thunderstore/dt/willis81808/HackPad?style=for-the-badge&logo=thunderstore&logoColor=white&link=https%3A%2F%2Fthunderstore.io%2Fc%2Flethal-company%2Fp%2Fwillis81808%2FHackPad%2F)
+![Thunderstore Version](https://img.shields.io/thunderstore/v/willis81808/HackPad?style=for-the-badge&logo=thunderstore&logoColor=white&link=https%3A%2F%2Fthunderstore.io%2Fc%2Flethal-company%2Fp%2Fwillis81808%2FHackPad%2F)
+
 
 This mod introduces a new item: the Hack Pad. The tool provides a way to open and close Big Doors as well as disable turrets manually without requiring somebody to stay behind in the ship.
 

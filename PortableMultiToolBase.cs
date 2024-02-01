@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,7 +25,7 @@ public class PortableMultiToolBase : BaseUnityPlugin
 {
     public const string MODGUID = "com.willis.lc.portablehackpad";
     public const string MODNAME = "PortableHackPad";
-    public const string MODVERSION = "1.1.2";
+    public const string MODVERSION = "1.1.3";
 
     public static PortableMultiToolBase Instance { get; private set; }
 
@@ -34,6 +35,9 @@ public class PortableMultiToolBase : BaseUnityPlugin
 
     public void Awake()
     {
+        base.Config.Clear();
+
+
         Instance = this;
         ModConfiguration = new(base.Config);
 

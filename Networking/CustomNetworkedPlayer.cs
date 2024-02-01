@@ -1,10 +1,13 @@
 ﻿using GameNetcodeStuff;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 namespace PortableMultiTool.Networking;
 internal class CustomNetworkedPlayer : NetworkBehaviour
@@ -35,16 +38,19 @@ internal class CustomNetworkedPlayer : NetworkBehaviour
 
     private void LocalUpdate()
     {
-        //playerController.health = 5000;
-        //playerController.sprintMeter = 5000;
-        //playerController.sprintMultiplier = 5;
-
         /*
-        if (Keyboard.current.numpad0Key.wasPressedThisFrame)
-        {
-            PortableMultiToolBase.Instance.Logger.LogWarning("Pressed numpad 0!");
-            Assets.DynamicItemCostTest += 1;
-        }
+        var target = Physics.OverlapSphere(playerController.gameplayCamera.transform.position, 10f)
+            .Select(c => c.gameObject.GetComponentInChildren<GrabbableObject>())
+            .Where(g => g != null)
+            .OrderBy(g => Vector3.Distance(g.transform.position, playerController.gameplayCamera.transform.position))
+            .FirstOrDefault();
+
+        if (target == null) return;
+
+        Vector3 targetDirection = target.transform.position - playerController.gameplayCamera.transform.position;
+        Vector3 relativeDirection = playerController.gameplayCamera.transform.InverseTransformDirection(targetDirection);
+        Vector2 simulatedMouseMovement = new Vector2(relativeDirection.x, relativeDirection.y);
+        playerController.CalculateNormalLookingInput(simulatedMouseMovement);
         */
     }
 }
